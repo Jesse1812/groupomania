@@ -8,20 +8,6 @@ dotenv.config();
 
 const app = express();
 
-// mongoose
-//   .connect(
-//     'mongodb+srv://' +
-//       process.env.DB_USER +
-//       ':' +
-//       process.env.DB_PASSWORD +
-//       '@cluster0.ooqgv.mongodb.net/' +
-//       process.env.DB_NAME +
-//       '?retryWrites=true&w=majority',
-//     { useNewUrlParser: true, useUnifiedTopology: true }
-//   )
-//   .then(() => console.log('Connexion à MongoDB réussie !'))
-//   .catch(() => console.log('Connexion à MongoDB échouée !'));
-
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
@@ -37,6 +23,6 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 // app.use(cors());
-router(app);
+// router(app);
 
 module.exports = app;
