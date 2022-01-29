@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
-const User = require('../models');
 const jwt = require('jsonwebtoken');
+// const db = require('../db_connect');   app crashed !!!
 const dotenv = require('dotenv');
 
 dotenv.config();

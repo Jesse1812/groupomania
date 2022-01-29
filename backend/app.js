@@ -1,10 +1,8 @@
 const express = require('express');
-// const mongoose = require('mongoose');
-// const cors = require('cors');
-const dotenv = require('dotenv');
-const router = require('./router');
+const cors = require('cors');
 
-dotenv.config();
+const userRoutes = require('./routes/user');
+// const postRoutes = require('./routes/post');
 
 const app = express();
 
@@ -22,7 +20,10 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-// app.use(cors());
-// router(app);
+app.use(cors());
+
+//routes
+app.use('api/auth', userRoutes);
+// app.use('api/posts', postRoutes);
 
 module.exports = app;
