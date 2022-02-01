@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
+const db = require('./db_connection');
 
 const userRoutes = require('./routes/user');
-// const postRoutes = require('./routes/post');
+const postRoutes = require('./routes/post');
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use(express.json());
 app.use(cors());
 
 //routes
-app.use('api/auth', userRoutes);
-// app.use('api/posts', postRoutes);
+app.use('/api/auth', userRoutes);
+app.use('/api/posts', postRoutes);
 
 module.exports = app;

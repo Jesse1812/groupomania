@@ -1,24 +1,20 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-// const db = require('../db_connect');   app crashed !!!
+const db = require('../db_connection');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
 exports.signup = (req, res, next) => {
-  bcrypt
-    .hash(req.body.password, 10)
-    .then((hash) => {
-      const user = new User({
-        email: req.body.email,
-        password: hash,
-      });
-      user
-        .save()
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        .catch((error) => res.status(400).json({ error }));
-    })
-    .catch((error) => res.status(500).json({ error }));
+  const user = req.body;
+  console.log(user);
+  const sql = 'INSERT into user (nom, prenom, email, password) values = ?';
+  db.query(sql, [user], (error) => {
+    if (error) {
+      console.log(error);
+    }
+    res.send({ status: 201, message: 'Successful request !' });
+  });
 };
 
 exports.login = (req, res, next) => {
