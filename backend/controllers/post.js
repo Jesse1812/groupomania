@@ -1,7 +1,7 @@
 const db = require('../db_connection');
 
 //Affichage des posts
-exports.getAllPosts = (req, res) => {
+exports.getAllPosts = (req, res, next) => {
   const sql = 'SELECT * FROM post';
   db.query(sql, (error, result) => {
     if (error) {
@@ -11,27 +11,12 @@ exports.getAllPosts = (req, res) => {
   });
 };
 
-// Affichage d'un post
-exports.getOnePost = (req, res, next) => {
-  db.query(
-    `SELECT * FROM posts WHERE posts.id = ${req.params.id}`,
-    (error, result, field) => {
-      if (error) {
-        return res.status(400).json({
-          error,
-        });
-      }
-      return res.status(200).json(result);
-    }
-  );
-};
-
 // Création d'un post
 exports.createPost = (req, res, next) => {
   db.query(
-    `INSERT INTO posts VALUES (NULL, '${req.body.userId}', '${req.body.message}',
-     NOW(), '${req.body.picture}', '${req.body.video}')`,
-    (error, result, field) => {
+    `INSERT INTO post (message, picture, video, userId, date) VALUES ('${req.body.message}', 
+    '${req.body.picture}', '${req.body.video}', '${req.body.userId}', NOW())`,
+    (error, result) => {
       if (error) {
         return res.status(400).json({
           error,
@@ -44,11 +29,26 @@ exports.createPost = (req, res, next) => {
   );
 };
 
+// Affichage d'un post
+exports.getOnePost = (req, res, next) => {
+  db.query(
+    `SELECT * FROM post WHERE postId = '${req.params.id}'`,
+    (error, result) => {
+      if (error) {
+        return res.status(400).json({
+          error,
+        });
+      }
+      return res.status(200).json(result);
+    }
+  );
+};
+
 // Modification d'un post
 exports.updateOnePost = (req, res, next) => {
   db.query(
-    `UPDATE posts SET message = '${req.body.message}', content = '${req.body.message}' WHERE posts.id = ${req.params.id}`,
-    (error, result, field) => {
+    `UPDATE post SET message = '${req.body.message}' WHERE postId = '${req.params.id}'`,
+    (error, result) => {
       if (error) {
         return res.status(400).json({
           error,
@@ -60,16 +60,16 @@ exports.updateOnePost = (req, res, next) => {
 };
 
 // Suppression d'un post
-exports.deleteOnePost = (req, res, next) => {
+exports.deleteOnePost = (req, res) => {
   db.query(
-    `DELETE FROM posts WHERE posts.id = ${req.params.id}`,
-    (error, result, field) => {
+    `DELETE FROM post WHERE postId = '${req.params.id}' AND userId = '${req.headers.userid}'`,
+    (error, result) => {
       if (error) {
-        return res.status(400).json({
+        res.status(400).json({
           error,
         });
-      }
-      return res.status(200).json(result);
+      } else if (result.affectedRows) return res.status(200).json(result);
+      res.status(401).json({ message: "Vous n'êtes pas autorisé" });
     }
   );
 };
@@ -77,27 +77,11 @@ exports.deleteOnePost = (req, res, next) => {
 // Voir tous les commentaires par date
 exports.getAllComments = (req, res, next) => {
   db.query(
-    `SELECT users.id, users.nom, users.prenom, comments.id,comments.message,
-     comments.userId, comments.date FROM users INNER JOIN 
-     comments ON users.id = comments.userId WHERE comments.postId = ${req.params.id} 
-     ORDER BY comments.date DESC`,
-    (error, result, field) => {
-      if (error) {
-        return res.status(400).json({
-          error,
-        });
-      }
-      return res.status(200).json(result);
-    }
-  );
-};
-
-// Nouveau commentaire
-exports.getNewComment = (req, res, next) => {
-  db.query(
-    `INSERT INTO comments VALUES (NULL, ${req.body.userId}, 
-        ${req.params.id}, NOW(), '${req.body.content}')`,
-    (error, result, field) => {
+    `SELECT userId, user.nom, user.prenom, commentId, comment.content,
+     comment.userId, comment.date FROM user INNER JOIN 
+     comment ON userId = comment.userId WHERE comment.postId = ${req.params.id} 
+     ORDER BY comment.date DESC`,
+    (error, result) => {
       if (error) {
         return res.status(400).json({
           error,
@@ -111,8 +95,8 @@ exports.getNewComment = (req, res, next) => {
 //Supprimer un commentaire
 exports.deleteComment = (req, res, next) => {
   db.query(
-    `DELETE FROM comments WHERE comments.id = ${req.params.id}`,
-    (error, result, field) => {
+    `DELETE FROM comment WHERE commentId = ${req.params.id}`,
+    (error, result) => {
       if (error) {
         return res.status(400).json({
           error,

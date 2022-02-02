@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+// Inscription
 exports.signup = async (req, res, next) => {
   const { nom, prenom, email, password, photo } = req.body;
   const hashPassword = await bcrypt.hash(password, 10);
@@ -18,6 +19,7 @@ exports.signup = async (req, res, next) => {
   });
 };
 
+// Connexion
 exports.login = (req, res, next) => {
   const { email, password } = req.body;
   const sql = `SELECT * FROM user WHERE email = '${email}'`;
@@ -45,4 +47,19 @@ exports.login = (req, res, next) => {
       res.json({ loggedIn: false, message: 'Utilisateur inconnu' });
     }
   });
+};
+
+// Delete user
+exports.deleteUser = (req, res, next) => {
+  db.query(
+    `DELETE FROM user WHERE userId = ${req.params.id}`,
+    (error, result) => {
+      if (error) {
+        return res.status(400).json({
+          error,
+        });
+      }
+      return res.status(200).json(result);
+    }
+  );
 };
