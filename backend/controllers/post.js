@@ -2,8 +2,7 @@ const db = require('../db_connection');
 
 //Affichage des posts
 exports.getAllPosts = (req, res) => {
-  console.log('hello');
-  const sql = 'SELECT * FROM user';
+  const sql = 'SELECT * FROM post';
   db.query(sql, (error, result) => {
     if (error) {
       console.log(error);
@@ -28,10 +27,10 @@ exports.getOnePost = (req, res, next) => {
 };
 
 // Création d'un post
-exports.newPost = (req, res, next) => {
+exports.createPost = (req, res, next) => {
   db.query(
-    `INSERT INTO posts VALUES (NULL, '${req.body.userId}', '${req.body.title}',
-     NOW(), '${req.body.content}')`,
+    `INSERT INTO posts VALUES (NULL, '${req.body.userId}', '${req.body.message}',
+     NOW(), '${req.body.picture}', '${req.body.video}')`,
     (error, result, field) => {
       if (error) {
         return res.status(400).json({
@@ -46,9 +45,9 @@ exports.newPost = (req, res, next) => {
 };
 
 // Modification d'un post
-exports.modifyOnePost = (req, res, next) => {
+exports.updateOnePost = (req, res, next) => {
   db.query(
-    `UPDATE posts SET title = '${req.body.title}', content = '${req.body.content}' WHERE posts.id = ${req.params.id}`,
+    `UPDATE posts SET message = '${req.body.message}', content = '${req.body.message}' WHERE posts.id = ${req.params.id}`,
     (error, result, field) => {
       if (error) {
         return res.status(400).json({
@@ -75,12 +74,10 @@ exports.deleteOnePost = (req, res, next) => {
   );
 };
 
-// Likes
-
 // Voir tous les commentaires par date
 exports.getAllComments = (req, res, next) => {
   db.query(
-    `SELECT users.id, users.nom, users.prenom, comments.id,comments.content,
+    `SELECT users.id, users.nom, users.prenom, comments.id,comments.message,
      comments.userId, comments.date FROM users INNER JOIN 
      comments ON users.id = comments.userId WHERE comments.postId = ${req.params.id} 
      ORDER BY comments.date DESC`,
@@ -96,7 +93,7 @@ exports.getAllComments = (req, res, next) => {
 };
 
 // Nouveau commentaire
-exports.newComment = (req, res, next) => {
+exports.getNewComment = (req, res, next) => {
   db.query(
     `INSERT INTO comments VALUES (NULL, ${req.body.userId}, 
         ${req.params.id}, NOW(), '${req.body.content}')`,
@@ -125,3 +122,5 @@ exports.deleteComment = (req, res, next) => {
     }
   );
 };
+
+// Likes

@@ -10,13 +10,13 @@ router.get('/', userCtrl.getAllPosts);
 // router.put('/:id', userCtrl.updateOnePost);
 // router.delete('/:id', userCtrl.deleteOnePost);
 
-// Likes
-// router.patch('/like-post/:id', auth, userCtrl.likePost);
-// router.patch('/unlike-post/:id', auth, userCtrl.unlikePost);
-
 // // Commentaires
 // router.get('/:id/comments', auth, userCtrl.getAllComments);
 // router.post('/:id/comment/', auth, userCtrl.getNewComment);
 // router.delete('/comment/:id', auth, userCtrl.deleteComment);
+
+// Likes
+// router.patch('/like-post/:id', auth, userCtrl.likePost);
+// router.patch('/unlike-post/:id', auth, userCtrl.unlikePost);
 
 module.exports = router;

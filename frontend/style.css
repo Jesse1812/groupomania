@@ -44,6 +44,32 @@ button {
   margin-top: 50px;
   background-color: red;
   color: white;
+  margin-bottom: 20px;
+}
+#profil,
+#messagerie,
+#posts {
+  height: 50%;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  text-align: center;
+  border: 2px solid black;
+}
+#profil-image {
+  width: 30%;
+  height: 30%;
+  margin: auto;
+}
+#description {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+}
+#messages button {
+  width: 20%;
+  background-color: rgb(253, 41, 0);
 }
 
 /* Media queries */

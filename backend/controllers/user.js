@@ -5,11 +5,12 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-exports.signup = (req, res, next) => {
-  const user = req.body;
-  console.log(user);
-  const sql = 'INSERT into user (nom, prenom, email, password) values = ?';
-  db.query(sql, [user], (error) => {
+exports.signup = async (req, res, next) => {
+  const { nom, prenom, email, password, photo } = req.body;
+  const hashPassword = await bcrypt.hash(password, 10);
+  const sql = `INSERT INTO user (nom, prenom, email, password, photo) VALUES ('${nom}', 
+  '${prenom}', '${email}', '${hashPassword}', '${photo}')`;
+  db.query(sql, (error) => {
     if (error) {
       console.log(error);
     }
@@ -18,25 +19,30 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  User.findOne({ email: req.body.email })
-    .then((user) => {
-      if (!user) {
-        return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-      }
-      bcrypt
-        .compare(req.body.password, user.password)
-        .then((valid) => {
-          if (!valid) {
-            return res.status(401).json({ error: 'Mot de passe incorrect !' });
-          }
-          res.status(200).json({
-            userId: user._id,
-            token: jwt.sign({ userId: user._id }, process.env.JWTPRIVATEKEY, {
+  const { email, password } = req.body;
+  const sql = `SELECT * FROM user WHERE email = '${email}'`;
+  db.query(sql, (error, result) => {
+    if (error) {
+      console.log(error);
+    }
+    if (result.length > 0) {
+      bcrypt.compare(password, result[0].password).then((valid) => {
+        if (!valid) {
+          res.status(401).json({ error: 'Mot de passe incorrect !' });
+        }
+        res.status(200).json({
+          userId: result[0].userId,
+          token: jwt.sign(
+            { userId: result[0].userId },
+            process.env.JWTPRIVATEKEY,
+            {
               expiresIn: '24h',
-            }),
-          });
-        })
-        .catch((error) => res.status(500).json({ error }));
-    })
-    .catch((error) => res.status(500).json({ error }));
+            }
+          ),
+        });
+      });
+    } else {
+      res.json({ loggedIn: false, message: 'Utilisateur inconnu' });
+    }
+  });
 };
