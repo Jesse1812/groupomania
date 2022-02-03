@@ -1,36 +1,17 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Groupomania</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
-  <header>
-    <img id="logo" src="./images//icon-left-font.png" alt="logo Groupomania" />
-  </header>
   <body>
-    <section id="sign-in">
-      <div id="sign-up">
-        <h1>Nouvel utilisateur</h1>
-        <input class="values" type="text" placeholder="Prénom" />
-        <input class="values" type="text" placeholder="Nom" />
-        <input class="values" type="email" placeholder="Adresse email" />
-        <input class="values" type="password" placeholder="Mot de passe" />
-        <input
-          class="values"
-          type="password"
-          placeholder="Confirmez le mot de passe"
-        />
-        <button type="submit">S'enregistrer</button>
-      </div>
-      <div id="login">
-        <h1>Connexion</h1>
-        <input class="values" type="email" placeholder="Adresse email" />
-        <input class="values" type="password" placeholder="Mot de passe" />
-        <button type="submit">Se connecter</button>
-      </div>
-    </section>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
   </body>
 </html>

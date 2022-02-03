@@ -73,38 +73,3 @@ exports.deleteOnePost = (req, res) => {
     }
   );
 };
-
-// Voir tous les commentaires par date
-exports.getAllComments = (req, res, next) => {
-  db.query(
-    `SELECT userId, user.nom, user.prenom, commentId, comment.content,
-     comment.userId, comment.date FROM user INNER JOIN 
-     comment ON userId = comment.userId WHERE comment.postId = ${req.params.id} 
-     ORDER BY comment.date DESC`,
-    (error, result) => {
-      if (error) {
-        return res.status(400).json({
-          error,
-        });
-      }
-      return res.status(200).json(result);
-    }
-  );
-};
-
-//Supprimer un commentaire
-exports.deleteComment = (req, res, next) => {
-  db.query(
-    `DELETE FROM comment WHERE commentId = ${req.params.id}`,
-    (error, result) => {
-      if (error) {
-        return res.status(400).json({
-          error,
-        });
-      }
-      return res.status(200).json(result);
-    }
-  );
-};
-
-// Likes
