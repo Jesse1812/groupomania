@@ -35,8 +35,18 @@
     </div>
     <div id="login">
       <h1>Connexion</h1>
-      <input class="values" type="email" placeholder="Adresse email" />
-      <input class="values" type="password" placeholder="Mot de passe" />
+      <input
+        class="values"
+        type="email"
+        placeholder="Adresse email"
+        v-model="formValues.email_login"
+      />
+      <input
+        class="values"
+        type="password"
+        placeholder="Mot de passe"
+        v-model="formValues.password_login"
+      />
       <button type="submit">Se connecter</button>
     </div>
   </form>
@@ -55,6 +65,8 @@ export default {
         prenom: null,
         email: null,
         password: null,
+        email_login: null,
+        password_login: null,
       },
     };
   },
@@ -69,7 +81,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-body {
+form {
   font-family: cursive, Arial, sans-serif;
 }
 
