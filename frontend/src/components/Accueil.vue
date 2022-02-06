@@ -54,7 +54,7 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'Accueil',
   props: {
     msg: String,
   },
@@ -81,17 +81,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-form {
-  font-family: cursive, Arial, sans-serif;
-}
-
-#logo {
-  width: 30%;
-  display: flex;
-  text-align: center;
-  margin: auto;
-}
-
 #sign-in {
   display: flex;
   flex-direction: row;
@@ -128,47 +117,5 @@ button {
   background-color: red;
   color: white;
   margin-bottom: 20px;
-}
-#profil,
-#messagerie,
-#posts {
-  height: 50%;
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  margin: auto;
-  text-align: center;
-  border: 2px solid black;
-}
-#profil-image {
-  width: 30%;
-  height: 30%;
-  margin: auto;
-}
-#description {
-  display: flex;
-  flex-direction: row;
-  width: 80%;
-}
-#messages button {
-  width: 20%;
-  background-color: rgb(253, 41, 0);
-}
-
-/* Media queries */
-@media only screen and (max-width: 600px) {
-  button {
-    width: 80%;
-  }
-}
-
-@media only screen and (max-width: 375px) {
-  #sign-in {
-    display: block;
-  }
-  button {
-    height: 100%;
-    width: 100%;
-  }
 }
 </style>

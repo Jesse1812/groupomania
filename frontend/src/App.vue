@@ -9,9 +9,11 @@
         />
       </header>
     </div>
+
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/posts">Posts</router-link>
+      <router-link to="/posts">Posts</router-link> |
+      <router-link to="/profil">Profil</router-link>
     </div>
     <router-view />
   </div>
@@ -19,11 +21,18 @@
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Cursive, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+#logo {
+  width: 30%;
+  display: flex;
+  text-align: center;
+  margin: auto;
 }
 
 #nav {
@@ -37,5 +46,22 @@
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+/* Media queries */
+@media only screen and (max-width: 600px) {
+  button {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  #sign-in {
+    display: block;
+  }
+  button {
+    height: 100%;
+    width: 100%;
+  }
 }
 </style>
