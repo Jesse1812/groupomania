@@ -20,7 +20,7 @@ export default {
         timeout: 5000,
         headers: {
           authorization:
-            'token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsImlhdCI6MTY0NDA3NjY0NywiZXhwIjoxNjQ0MTYzMDQ3fQ.QR51giwH9BDAFH5DjrfX-qdh1S16n6FtkjY_LtimmP4',
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsImlhdCI6MTY0NDE1NDQzNCwiZXhwIjoxNjQ0MjQwODM0fQ.C2Baw5VVBN9ChQ_RdQkKSDK2qOWcKYfO0PfcmiDWmGY',
         },
       })
       .then((res) => console.log(res))

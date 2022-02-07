@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+// import axios from 'axios';
 // @ is an alias to /src
 import AfficherProfil from '@/components/AfficherProfil.vue';
 

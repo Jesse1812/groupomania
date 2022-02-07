@@ -2,7 +2,11 @@
   <section id="profil">
     <h1>Profil</h1>
     <div id="description">
-      <img id="profil-image" src="./images/profile.png" alt="image de profil" />
+      <img
+        id="profil-image"
+        src="../assets/images/profile.png"
+        alt="image de profil"
+      />
       <div id="colonne">
         <h2>Nom</h2>
         <h2>Prénom</h2>
@@ -42,8 +46,19 @@ export default {
   flex-direction: row;
   width: 80%;
 }
-#messages button {
-  width: 20%;
+#modify-account {
+  width: 30%;
+  height: 30px;
+  margin: auto;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+#delete-account {
+  width: 30%;
+  height: 30px;
   background-color: rgb(253, 41, 0);
+  color: white;
+  margin: auto;
+  margin-bottom: 10px;
 }
 </style>

@@ -1,14 +1,14 @@
 const mysql = require('mysql2');
 require('dotenv').config();
 
-const sql = mysql.createConnection({
+const sql = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
 });
 
-sql.connect(function (err) {
+sql.getConnection(function (err) {
   if (err) {
     return console.error('error: ' + err.message);
   }
