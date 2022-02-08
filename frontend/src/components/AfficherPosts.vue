@@ -1,11 +1,11 @@
 <template>
-  <form @submit="submitForm" id="messagerie">
+  <form @submit="submitPost" id="messagerie">
     <div id="messages">
       <input
         class="message"
         type="text"
         placeholder="Ecrivez votre message"
-        v-model="messageValue"
+        v-model="postValue"
       />
       <button id="Validation" type="submit">Publier</button>
     </div>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'AfficherPosts',
   props: {
@@ -25,13 +26,18 @@ export default {
   },
   data() {
     return {
-      messageValue: null,
+      postValue: null,
     };
   },
   methods: {
-    submitForm(event) {
+    submitPost(event) {
       event.preventDefault();
-      console.log(this.messageValue);
+      axios
+        .post('http://localhost:3000/api/posts', {
+          ...this.postValue,
+        })
+        .then((res) => (this.formMessage = res.data.message))
+        .catch((err) => (this.formMessage = err.data.error));
     },
   },
 };

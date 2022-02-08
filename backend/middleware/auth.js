@@ -12,8 +12,8 @@ module.exports = (req, res, next) => {
     req.auth = { userId };
     console.log(req.body.userId);
     console.log(req.headers.userid);
-    if (parseInt(req.body.userId) || parseInt(req.headers.userid) !== userId) {
-      throw 'Invalid user ID';
+    if (parseInt(req.headers.userid) !== userId) {
+      throw 'Nom utilisateur non valide';
     } else {
       next();
     }

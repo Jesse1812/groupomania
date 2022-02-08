@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapState } from 'vuex';
 // import { post } from '../api';
 export default {
   name: 'Accueil',
@@ -80,36 +80,27 @@ export default {
         email: null,
         password: null,
       },
-      formMessage: null,
-      messageLogin: null,
     };
+  },
+  computed: {
+    ...mapState(['formMessage', 'messageLogin']),
   },
   methods: {
     submitForm(event) {
       event.preventDefault();
       if (this.formValues.password !== this.formValues.confirmPassword) {
-        this.formMessage = 'Veuillez entrer le même mot de passe';
+        this.$store.commit(
+          'setFormMessage',
+          'Veuillez entrer le même mot de passe'
+        );
       } else {
-        axios
-          .post('http://localhost:3000/api/auth/signup', {
-            ...this.formValues,
-          })
-          .then((res) => (this.formMessage = res.data.message))
-          .catch((err) => (this.formMessage = err.data.error));
+        this.$store.dispatch('signup', this.formValues);
       }
       // post('http://localhost:3000/api/auth/signup', null, this.formValues);
     },
     submitLogin(event) {
       event.preventDefault();
-      axios
-        .post('http://localhost:3000/api/auth/login', {
-          ...this.formLogin,
-        })
-        .then((res) => {
-          localStorage.setItem('token', res.data.token);
-          localStorage.setItem('useId', res.data.userId);
-        })
-        .catch(() => (this.messageLogin = 'Error'));
+      this.$store.dispatch('login', this.formLogin);
     },
   },
 };

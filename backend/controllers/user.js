@@ -15,7 +15,7 @@ exports.signup = async (req, res, next) => {
     if (error) {
       console.log(error);
     }
-    res.send({ status: 201, message: 'Successful request !' });
+    res.send({ status: 201, message: 'Enregistrement confirmé' });
   });
 };
 

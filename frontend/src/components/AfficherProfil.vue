@@ -13,15 +13,30 @@
       </div>
     </div>
     <button id="modify-account" type="submit">Modifier mon compte</button>
-    <button id="delete-account" type="submit">Supprimer mon compte</button>
+    <button @click="deleteProfil()" id="delete-account">
+      Supprimer mon compte
+    </button>
   </section>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'AfficherProfil',
   props: {
     msg: String,
+  },
+  methods: {
+    deleteProfil() {
+      axios
+        .delete('http://localhost:3000/api/auth/${this.$route.params.id}', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.$token}`,
+          },
+        })
+        .then((location.href = '/'));
+    },
   },
 };
 </script>
