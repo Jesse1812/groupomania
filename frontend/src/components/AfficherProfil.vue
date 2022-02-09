@@ -12,7 +12,8 @@
         <h2>Prénom</h2>
       </div>
     </div>
-    <button id="modify-account" type="submit">Modifier mon compte</button>
+    <button id="modify-account" type="submit">Modifier ma photo</button>
+    <button id="deconnect" type="submit">Me déconnecter</button>
     <button @click="deleteProfil()" id="delete-account">
       Supprimer mon compte
     </button>
@@ -64,12 +65,13 @@ export default {
   flex-direction: row;
   width: 80%;
 }
-#modify-account {
+#modify-account,
+#deconnect {
   width: 30%;
   height: 30px;
   margin: auto;
   margin-bottom: 10px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 #delete-account {
   width: 30%;
@@ -78,5 +80,13 @@ export default {
   color: white;
   margin: auto;
   margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+@media only screen and (max-width: 850px) {
+  button {
+    min-height: 50px;
+    min-width: 80px;
+  }
 }
 </style>

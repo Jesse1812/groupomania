@@ -39,7 +39,7 @@
     </form>
     <form @submit="submitLogin">
       <div id="login">
-        <h1>Connexion</h1>
+        <h1>Connection</h1>
         <input
           class="values"
           type="email"
@@ -146,9 +146,23 @@ input::placeholder {
 
 button {
   width: 50%;
-  height: 40px;
+  min-height: 60px;
   background-color: rgb(186, 219, 206);
   margin: auto;
   margin-top: 10px;
+}
+
+/* Media queries */
+@media only screen and (max-width: 600px) {
+  button {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  #accueil {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>

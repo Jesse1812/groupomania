@@ -18,10 +18,6 @@ export default {
     axios
       .get('http://localhost:3000/api/posts/', {
         timeout: 5000,
-        // headers: {
-        //   authorization:
-        //     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsImlhdCI6MTY0NDE1NDQzNCwiZXhwIjoxNjQ0MjQwODM0fQ.C2Baw5VVBN9ChQ_RdQkKSDK2qOWcKYfO0PfcmiDWmGY',
-        // },
       })
       .then((res) => console.log(res))
       .catch((err) => console.error(err));

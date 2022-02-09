@@ -13,7 +13,7 @@
       <div v-for="post in posts" :key="post.postId">
         <h3>{{ post.userId }}</h3>
         <img :src="post.picture" class="image" />
-        <video :src="post.video" class="video"></video>
+        <iframe :src="post.video" class="gif"></iframe>
         <h2>{{ post.message }}</h2>
         <h4>{{ post.date }}</h4>
         <hr />
@@ -69,7 +69,7 @@ export default {
   margin: 10px;
 }
 button {
-  width: 15%;
+  width: 20%;
   height: 40px;
   background-color: rgb(186, 219, 206);
   margin: auto;
@@ -77,13 +77,26 @@ button {
   margin-top: 10px;
 }
 .image,
-.video {
-  width: 100%;
+.gif {
+  width: 50%;
   height: 200px;
   margin: auto;
   object-fit: contain;
 }
 h3 {
   text-align: left;
+}
+
+@media only screen and (max-width: 600px) {
+  .image,
+  .gif {
+    width: 50%;
+    height: 100px;
+    margin: auto;
+    object-fit: contain;
+  }
+  button {
+    min-width: 50px;
+  }
 }
 </style>

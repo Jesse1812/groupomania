@@ -11,9 +11,9 @@
     </div>
 
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/posts">Posts</router-link> |
-      <router-link to="/profil">Profil</router-link>
+      <router-link to="/">Connection</router-link> |
+      <router-link to="/profil">Mon Profil</router-link> |
+      <router-link to="/posts">Forum</router-link>
     </div>
     <router-view />
   </div>
@@ -46,22 +46,5 @@
 
 #nav a.router-link-exact-active {
   color: #42b983;
-}
-
-/* Media queries */
-@media only screen and (max-width: 600px) {
-  button {
-    width: 80%;
-  }
-}
-
-@media only screen and (max-width: 375px) {
-  #sign-in {
-    display: block;
-  }
-  button {
-    height: 100%;
-    width: 100%;
-  }
 }
 </style>
