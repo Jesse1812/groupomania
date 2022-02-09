@@ -11,10 +11,11 @@ const apiService = axios.create({
 export default new Vuex.Store({
   state: {
     formMessage: '',
-    userInfo: {
-      userId: '',
-      token: '',
-    },
+    // userInfo: {
+    //   userId: '',
+    //   token: '',
+    // },
+    formLogin: '',
     messageLogin: '',
   },
   mutations: {
@@ -38,6 +39,7 @@ export default new Vuex.Store({
     },
     login: ({ commit }, formLogin) => {
       commit;
+      apiService.defaults.headers.common['authorization'] = '';
       apiService
         .post('auth/login', formLogin)
         .then((res) => {

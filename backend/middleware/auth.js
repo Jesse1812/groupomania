@@ -10,15 +10,12 @@ module.exports = (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.JWTPRIVATEKEY);
     const userId = decodedToken.userId;
     req.auth = { userId };
-    console.log(req.body.userId);
-    console.log(req.headers.userid);
-    if (parseInt(req.headers.userid) !== userId) {
+    if (!userId) {
       throw 'Nom utilisateur non valide';
     } else {
       next();
     }
   } catch {
-    console.log('erreur 18');
     res.status(401).json({
       error: new Error('Invalid request!'),
     });

@@ -1,5 +1,5 @@
 <template>
-  <form @submit="submitPost" id="messagerie">
+  <div id="messagerie">
     <div id="messages">
       <input
         class="message"
@@ -10,11 +10,11 @@
       <button id="Validation" type="submit">Publier</button>
     </div>
     <div id="posts">
-      <div>
-        <h1>Affichage des posts ici</h1>
+      <div v-for="post in posts" :key="post.postId">
+        <h1>{{ post.message }}</h1>
       </div>
     </div>
-  </form>
+  </div>
 </template>
 
 <script>
@@ -27,19 +27,33 @@ export default {
   data() {
     return {
       postValue: null,
+      posts: null,
     };
   },
-  methods: {
-    submitPost(event) {
-      event.preventDefault();
-      axios
-        .post('http://localhost:3000/api/posts', {
-          ...this.postValue,
-        })
-        .then((res) => (this.formMessage = res.data.message))
-        .catch((err) => (this.formMessage = err.data.error));
-    },
+  created: function () {
+    // `this` est une référence à l'instance de vm
+    const token = localStorage.getItem('token');
+    console.log('a is: ');
+    axios
+      .get('http://localhost:3000/api/posts/', {
+        headers: {
+          authorization: 'Bearer ' + token,
+        },
+      })
+      .then((res) => (this.posts = res.data.result))
+      .catch((err) => console.log('stop', err));
   },
+  // methods: {
+  //   submitPost(event) {
+  //     event.preventDefault();
+  //     axios
+  //       .post('http://localhost:3000/api/posts', {
+  //         ...this.postValue,
+  //       })
+  //       .then((res) => (this.formMessage = res.data.message))
+  //       .catch((err) => (this.formMessage = err.data.error));
+  // },
+  // },
 };
 </script>
 

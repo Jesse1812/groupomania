@@ -60,8 +60,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-// import { post } from '../api';
+// import { mapState } from 'vuex';
+import axios from 'axios';
+
 export default {
   name: 'Accueil',
   props: {
@@ -80,27 +81,38 @@ export default {
         email: null,
         password: null,
       },
+      formMessage: null,
+      messageLogin: null,
     };
   },
-  computed: {
-    ...mapState(['formMessage', 'messageLogin']),
-  },
+  // computed: {
+  //   ...mapState(['formMessage', 'messageLog']),
+  // },
   methods: {
     submitForm(event) {
       event.preventDefault();
       if (this.formValues.password !== this.formValues.confirmPassword) {
-        this.$store.commit(
-          'setFormMessage',
-          'Veuillez entrer le même mot de passe'
-        );
+        this.formMessage = 'Veuillez entrer le même mot de passe';
       } else {
-        this.$store.dispatch('signup', this.formValues);
+        axios
+          .post('http://localhost:3000/api/auth/signup', {
+            ...this.formValues,
+          })
+          .then((res) => (this.formMessage = res.data.message))
+          .catch((err) => (this.formMessage = err.data.error));
       }
-      // post('http://localhost:3000/api/auth/signup', null, this.formValues);
     },
     submitLogin(event) {
       event.preventDefault();
-      this.$store.dispatch('login', this.formLogin);
+      axios
+        .post('http://localhost:3000/api/auth/login', {
+          ...this.formLogin,
+        })
+        .then((res) => {
+          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('userId', res.data.userId);
+        })
+        .catch(() => (this.messageLogin = 'Error'));
     },
   },
 };
