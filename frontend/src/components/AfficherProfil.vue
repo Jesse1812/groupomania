@@ -28,11 +28,14 @@ export default {
   },
   methods: {
     deleteProfil() {
+      const userId = localStorage.getItem('userId');
+      const token = localStorage.getItem('token');
+      console.log(this.$token);
       axios
-        .delete('http://localhost:3000/api/auth/${this.$route.params.id}', {
+        .delete(`http://localhost:3000/api/auth/${userId}`, {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.$token}`,
+            authorization: `Bearer ${token}`,
           },
         })
         .then((location.href = '/'));

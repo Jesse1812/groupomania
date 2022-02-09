@@ -95,9 +95,7 @@ export default {
         this.formMessage = 'Veuillez entrer le même mot de passe';
       } else {
         axios
-          .post('http://localhost:3000/api/auth/signup', {
-            ...this.formValues,
-          })
+          .post('http://localhost:3000/api/auth/signup', this.formValues)
           .then((res) => (this.formMessage = res.data.message))
           .catch((err) => (this.formMessage = err.data.error));
       }
@@ -111,8 +109,9 @@ export default {
         .then((res) => {
           localStorage.setItem('token', res.data.token);
           localStorage.setItem('userId', res.data.userId);
+          this.messageLogin = 'Connecté';
         })
-        .catch(() => (this.messageLogin = 'Error'));
+        .catch(() => (this.messageLogin = 'Erreur'));
     },
   },
 };

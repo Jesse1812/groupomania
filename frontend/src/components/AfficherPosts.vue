@@ -11,7 +11,12 @@
     </div>
     <div id="posts">
       <div v-for="post in posts" :key="post.postId">
-        <h1>{{ post.message }}</h1>
+        <h3>{{ post.userId }}</h3>
+        <img :src="post.picture" class="image" />
+        <video :src="post.video" class="video"></video>
+        <h2>{{ post.message }}</h2>
+        <h4>{{ post.date }}</h4>
+        <hr />
       </div>
     </div>
   </div>
@@ -33,7 +38,6 @@ export default {
   created: function () {
     // `this` est une référence à l'instance de vm
     const token = localStorage.getItem('token');
-    console.log('a is: ');
     axios
       .get('http://localhost:3000/api/posts/', {
         headers: {
@@ -43,35 +47,26 @@ export default {
       .then((res) => (this.posts = res.data.result))
       .catch((err) => console.log('stop', err));
   },
-  // methods: {
-  //   submitPost(event) {
-  //     event.preventDefault();
-  //     axios
-  //       .post('http://localhost:3000/api/posts', {
-  //         ...this.postValue,
-  //       })
-  //       .then((res) => (this.formMessage = res.data.message))
-  //       .catch((err) => (this.formMessage = err.data.error));
-  // },
-  // },
 };
 </script>
 
 <style scoped>
-#messagerie,
-#posts {
-  width: 80%;
-  height: 300px;
+#messagerie {
+  width: 58%;
   display: flex;
   flex-direction: column;
   margin: auto;
   text-align: center;
   border: 2px solid black;
 }
+#posts {
+  margin: 10px;
+  border: 1px solid black;
+}
 .message {
   width: 80%;
-  height: 20px;
-  margin-right: 10px;
+  height: 50px;
+  margin: 10px;
 }
 button {
   width: 15%;
@@ -80,5 +75,15 @@ button {
   margin: auto;
   margin-bottom: 10px;
   margin-top: 10px;
+}
+.image,
+.video {
+  width: 100%;
+  height: 200px;
+  margin: auto;
+  object-fit: contain;
+}
+h3 {
+  text-align: left;
 }
 </style>

@@ -2,7 +2,7 @@ const db = require('../db_connection');
 
 //Affichage des posts
 exports.getAllPosts = (req, res, next) => {
-  const sql = 'SELECT * FROM post';
+  const sql = 'SELECT * FROM post ORDER BY date DESC';
   db.query(sql, (error, result) => {
     if (error) {
       console.log(error);

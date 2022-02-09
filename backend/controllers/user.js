@@ -12,12 +12,16 @@ exports.signup = async (req, res, next) => {
   const hashPassword = await bcrypt.hash(password, 10);
   const sql = `INSERT INTO user (nom, prenom, email, password, photo) VALUES ('${nom}', 
   '${prenom}', '${email}', '${hashPassword}', '${photo}')`;
-  db.query(sql, (error) => {
-    if (error) {
-      res.send({ status: 401, message: 'Cet email est déjà utilisé' });
-    }
-    res.send({ status: 201, message: 'Enregistrement confirmé' });
-  });
+  try {
+    db.query(sql, (error) => {
+      if (error) {
+        return res.send({ status: 401, message: 'Cet email est déjà utilisé' });
+      }
+      return res.send({ status: 201, message: 'Enregistrement confirmé' });
+    });
+  } catch (err) {
+    return res.status(500).json({ loggedIn: false, message: 'Erreur 1' });
+  }
 };
 
 // Connexion
