@@ -11,7 +11,10 @@
     </div>
     <div id="posts">
       <div v-for="post in posts" :key="post.postId">
-        <h3>{{ post.userId }}</h3>
+        <h3>
+          {{ userInfo && userInfo.firstName }}
+          {{ userInfo && userInfo.lastName }}
+        </h3>
         <img :src="post.picture" class="image" />
         <iframe :src="post.video" class="gif"></iframe>
         <h2>{{ post.message }}</h2>
@@ -24,6 +27,7 @@
 
 <script>
 import axios from 'axios';
+import { mapGetters } from 'vuex';
 export default {
   name: 'AfficherPosts',
   props: {
@@ -35,9 +39,13 @@ export default {
       posts: null,
     };
   },
+  computed: {
+    ...mapGetters(['userInfo']),
+  },
   created: function () {
     // `this` est une référence à l'instance de vm
     const token = localStorage.getItem('token');
+    console.log('toooken', 'Bearer ' + token);
     axios
       .get('http://localhost:3000/api/posts/', {
         headers: {

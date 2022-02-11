@@ -6,21 +6,28 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // Inscription
-exports.signup = async (req, res, next) => {
+exports.signup = async (req, res) => {
   const { nom, prenom, email, password, photo } = req.body;
-  console.log(req.body);
-  const hashPassword = await bcrypt.hash(password, 10);
-  const sql = `INSERT INTO user (nom, prenom, email, password, photo) VALUES ('${nom}', 
+  if (nom && prenom && email && password) {
+    const hashPassword = await bcrypt.hash(password, 10);
+    const sql = `INSERT INTO user (nom, prenom, email, password, photo) VALUES ('${nom}', 
   '${prenom}', '${email}', '${hashPassword}', '${photo}')`;
-  try {
-    db.query(sql, (error) => {
-      if (error) {
-        return res.send({ status: 401, message: 'Cet email est déjà utilisé' });
-      }
-      return res.send({ status: 201, message: 'Enregistrement confirmé' });
-    });
-  } catch (err) {
-    return res.status(500).json({ loggedIn: false, message: 'Erreur 1' });
+    try {
+      db.query(sql, (error) => {
+        if (error) {
+          return res
+            .status(401)
+            .json({ message: 'Cet email est déjà utilisé' });
+        }
+        return res.status(201).json({ message: 'Enregistrement confirmé' });
+      });
+    } catch (err) {
+      return res.status(500).json({ loggedIn: false, message: 'Erreur 1' });
+    }
+  } else {
+    return res
+      .status(401)
+      .json({ loggedIn: false, message: 'Formulaire incomplet' });
   }
 };
 
@@ -41,6 +48,8 @@ exports.login = (req, res, next) => {
           }
           return res.status(200).json({
             userId: result[0].userId,
+            firstName: result[0].nom,
+            lastName: result[0].prenom,
             token: jwt.sign(
               { userId: result[0].userId },
               process.env.JWTPRIVATEKEY,
@@ -51,7 +60,9 @@ exports.login = (req, res, next) => {
           });
         });
       } else {
-        return res.json({ loggedIn: false, message: 'Utilisateur inconnu' });
+        return res
+          .status(401)
+          .json({ loggedIn: false, message: 'Utilisateur inconnu' });
       }
     });
   } catch (err) {

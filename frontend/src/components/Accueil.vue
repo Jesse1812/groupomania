@@ -60,7 +60,7 @@
 </template>
 
 <script>
-// import { mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import axios from 'axios';
 
 export default {
@@ -89,6 +89,7 @@ export default {
   //   ...mapState(['formMessage', 'messageLog']),
   // },
   methods: {
+    ...mapActions(['login']),
     submitForm(event) {
       event.preventDefault();
       if (this.formValues.password !== this.formValues.confirmPassword) {
@@ -102,16 +103,7 @@ export default {
     },
     submitLogin(event) {
       event.preventDefault();
-      axios
-        .post('http://localhost:3000/api/auth/login', {
-          ...this.formLogin,
-        })
-        .then((res) => {
-          localStorage.setItem('token', res.data.token);
-          localStorage.setItem('userId', res.data.userId);
-          this.messageLogin = 'Connecté';
-        })
-        .catch(() => (this.messageLogin = 'Erreur'));
+      this.login(this.formLogin);
     },
   },
 };
@@ -146,7 +138,7 @@ input::placeholder {
 
 button {
   width: 50%;
-  min-height: 60px;
+  min-height: 50px;
   background-color: rgb(186, 219, 206);
   margin: auto;
   margin-top: 10px;

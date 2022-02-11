@@ -8,8 +8,8 @@
         alt="image de profil"
       />
       <div id="colonne">
-        <h2>Nom</h2>
-        <h2>Prénom</h2>
+        <h2>Nom: {{ userInfo && userInfo.firstName }}</h2>
+        <h2>Prénom: {{ userInfo && userInfo.lastName }}</h2>
       </div>
     </div>
     <button id="modify-account" type="submit">Modifier ma photo</button>
@@ -22,10 +22,14 @@
 
 <script>
 import axios from 'axios';
+import { mapGetters } from 'vuex';
 export default {
   name: 'AfficherProfil',
   props: {
     msg: String,
+  },
+  computed: {
+    ...mapGetters(['userInfo']),
   },
   methods: {
     deleteProfil() {
