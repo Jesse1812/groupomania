@@ -13,7 +13,9 @@
       </div>
     </div>
     <button id="modify-account" type="submit">Modifier ma photo</button>
-    <button id="deconnect" type="submit">Me déconnecter</button>
+    <button @click="deconnect()" id="deconnect" type="submit">
+      Me déconnecter
+    </button>
     <button @click="deleteProfil()" id="delete-account">
       Supprimer mon compte
     </button>
@@ -44,6 +46,9 @@ export default {
           },
         })
         .then((location.href = '/'));
+    },
+    deconnect() {
+      localStorage.removeItem('token');
     },
   },
 };

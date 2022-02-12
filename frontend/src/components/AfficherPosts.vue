@@ -7,7 +7,7 @@
         placeholder="Ecrivez votre message"
         v-model="postValue"
       />
-      <button id="Validation" type="submit">Publier</button>
+      <button @click="addPost" id="Validation" type="submit">Publier</button>
     </div>
     <div id="posts">
       <div v-for="post in posts" :key="post.postId">
@@ -15,10 +15,15 @@
           {{ userInfo && userInfo.firstName }}
           {{ userInfo && userInfo.lastName }}
         </h3>
-        <img :src="post.picture" class="image" />
-        <iframe :src="post.video" class="gif"></iframe>
+        <img
+          v-if="post.picture !== 'undefined'"
+          :src="post.picture"
+          class="image"
+        />
+        <div v-if="post.video !== 'undefined'">
+          <iframe :src="post.video" class="gif"></iframe>
+        </div>
         <h2>{{ post.message }}</h2>
-        <h4>{{ post.date }}</h4>
         <hr />
       </div>
     </div>
@@ -27,7 +32,7 @@
 
 <script>
 import axios from 'axios';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'AfficherPosts',
   props: {
@@ -42,10 +47,10 @@ export default {
   computed: {
     ...mapGetters(['userInfo']),
   },
-  created: function () {
+  mounted: function () {
     // `this` est une référence à l'instance de vm
     const token = localStorage.getItem('token');
-    console.log('toooken', 'Bearer ' + token);
+    console.log('hi !');
     axios
       .get('http://localhost:3000/api/posts/', {
         headers: {
@@ -54,6 +59,27 @@ export default {
       })
       .then((res) => (this.posts = res.data.result))
       .catch((err) => console.log('stop', err));
+  },
+  methods: {
+    ...mapActions(['submitPost']),
+
+    addPost: function () {
+      console.log(this.userInfo);
+      this.submitPost({
+        message: this.postValue,
+        userId: this.userInfo.userId,
+      }).then(() => {
+        const token = localStorage.getItem('token');
+        axios
+          .get('http://localhost:3000/api/posts/', {
+            headers: {
+              authorization: 'Bearer ' + token,
+            },
+          })
+          .then((res) => (this.posts = res.data.result))
+          .catch((err) => console.log('stop', err));
+      });
+    },
   },
 };
 </script>
