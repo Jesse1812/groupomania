@@ -1,12 +1,5 @@
 <template>
   <div id="messages">
-    <input
-      class="message"
-      type="text"
-      placeholder="Ecrivez votre message"
-      v-model="postValue"
-    />
-
     <button v-if="authorized && !modify" @click="modify = true">
       Modifier
     </button>

@@ -35,9 +35,9 @@ export default {
   },
   methods: {
     deleteProfil() {
+      window.alert('Vous allez supprimer définitivement votre profil');
       const userId = localStorage.getItem('userId');
       const token = localStorage.getItem('token');
-      console.log(this.$token);
       axios
         .delete(`http://localhost:3000/api/auth/${userId}`, {
           headers: {
@@ -49,6 +49,8 @@ export default {
     },
     deconnect() {
       localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      this.$router.push('/');
     },
   },
 };

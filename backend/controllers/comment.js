@@ -17,10 +17,10 @@ exports.addNewComment = (req, res, next) => {
   );
 };
 
-exports.getAllComments = (req, res) => {
-  const sql = `SELECT user.nom, user.prenom, comment.content, comment.date FROM user,
+exports.getAllCommentsByPostId = (req, res) => {
+  const sql = `SELECT user.nom, user.prenom, user.userId, comment.content, comment.date, comment.commentId FROM user,
    comment INNER JOIN post ON post.postId = comment.postId WHERE 
-   user.userId = post.userId AND post.postId = '${req.headers.postid}' ORDER BY comment.date DESC`;
+   user.userId = post.userId AND post.postId = '${req.params.id}' ORDER BY comment.date DESC`;
   db.query(sql, (err, result) => {
     if (err) {
       res.status(404).json({ err });

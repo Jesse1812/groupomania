@@ -9,11 +9,11 @@
       />
       <button @click="addPost" id="Validation" type="submit">Publier</button>
     </div>
-    <div id="posts">
-      <div v-for="post in posts" :key="post.postId">
+    <div v-for="post in posts" :key="post.postId">
+      <div id="posts">
         <h3>
-          {{ userInfo && userInfo.firstName }}
-          {{ userInfo && userInfo.lastName }}
+          {{ post.nom }}
+          {{ post.prenom }}
         </h3>
         <img
           v-if="post.picture !== 'undefined'"
@@ -25,6 +25,7 @@
         </div>
         <h2>{{ post.message }}</h2>
         <hr />
+        <comments :postId="post.postId" />
       </div>
     </div>
   </div>
@@ -32,9 +33,13 @@
 
 <script>
 import axios from 'axios';
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
+import comments from './comments.vue';
 export default {
   name: 'AfficherPosts',
+  components: {
+    comments,
+  },
   props: {
     msg: String,
   },
@@ -44,13 +49,8 @@ export default {
       posts: null,
     };
   },
-  computed: {
-    ...mapGetters(['userInfo']),
-  },
   mounted: function () {
-    // `this` est une référence à l'instance de vm
     const token = localStorage.getItem('token');
-    console.log('hi !');
     axios
       .get('http://localhost:3000/api/posts/', {
         headers: {
@@ -90,12 +90,16 @@ export default {
   display: flex;
   flex-direction: column;
   margin: auto;
-  text-align: center;
+  margin-top: 40px;
   border: 2px solid black;
 }
 #posts {
   margin: 10px;
   border: 1px solid black;
+}
+.comments {
+  border: 1px solid black;
+  text-align: left;
 }
 .message {
   width: 80%;

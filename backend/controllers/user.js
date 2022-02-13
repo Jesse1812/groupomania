@@ -22,7 +22,7 @@ exports.signup = async (req, res) => {
         return res.status(201).json({ message: 'Enregistrement confirmé' });
       });
     } catch (err) {
-      return res.status(500).json({ loggedIn: false, message: 'Erreur 1' });
+      return res.status(500).json({ loggedIn: false, message: 'Erreur' });
     }
   } else {
     return res
@@ -39,7 +39,7 @@ exports.login = (req, res, next) => {
     db.query(sql, (error, result) => {
       if (error) {
         console.log(error);
-        return res.status(500).json({ loggedIn: false, message: 'Erreur 2' });
+        return res.status(500).json({ loggedIn: false, message: 'Erreur' });
       }
       if (result?.length > 0) {
         bcrypt.compare(password, result[0].password).then((valid) => {
@@ -66,7 +66,7 @@ exports.login = (req, res, next) => {
       }
     });
   } catch (err) {
-    return res.status(500).json({ loggedIn: false, message: 'Erreur 2' });
+    return res.status(500).json({ loggedIn: false, message: 'Error' });
   }
 };
 
