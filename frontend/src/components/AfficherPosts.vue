@@ -1,5 +1,6 @@
 <template>
   <div id="messagerie">
+    <h1>Messagerie</h1>
     <div id="messages">
       <input
         class="message"
@@ -7,6 +8,8 @@
         placeholder="Ecrivez votre message"
         v-model="postValue"
       />
+      <p>Ajouter une photo</p>
+      <p>Ajouter un .gif</p>
       <button @click="addPost" id="Validation" type="submit">Publier</button>
     </div>
     <div v-for="post in posts" :key="post.postId">
@@ -64,7 +67,6 @@ export default {
     ...mapActions(['submitPost']),
 
     addPost: function () {
-      console.log(this.userInfo);
       this.submitPost({
         message: this.postValue,
         userId: this.userInfo.userId,
@@ -92,6 +94,9 @@ export default {
   margin: auto;
   margin-top: 40px;
   border: 2px solid black;
+}
+h1 {
+  color: black;
 }
 #posts {
   margin: 10px;

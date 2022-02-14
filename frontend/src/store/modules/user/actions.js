@@ -38,3 +38,15 @@ export const submitPost = (_, data) => {
     );
   });
 };
+
+export const submitComment = ({ state }, data) => {
+  data.userId = state.userInfo.userId;
+  return new Promise((resolve, reject) => {
+    apiService.post('/comments', data).then(
+      (res) => {
+        resolve(res);
+      },
+      (err) => reject(err)
+    );
+  });
+};

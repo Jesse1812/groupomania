@@ -1,17 +1,18 @@
 <template>
   <div>
     <p>Commentaires</p>
-    <!-- <input
+    <input
       class="message"
       type="text"
-      placeholder="Ecrivez votre message"
-      v-model="postValue"
-    /> -->
-    <!-- <button @click="addPost" id="Validation" type="submit">Publier</button> -->
+      placeholder="Ecrivez votre commentaire"
+      v-model="commentValue"
+    />
+    <button @click="addComment" id="validation" type="submit">Publier</button>
     <div v-for="comment in comments" :key="comment.commentId">
       <div class="comments">
-        <!-- <button v-if="isDeleteComment(comment.userId)">X</button> -->
+        <button v-if="isDeleteComment(comment.userId)">X</button>
         <!-- div button envoi commentId avec axios pour suppression -->
+        <h3>{{ comment.userId }}</h3>
         <p>{{ comment.content }}</p>
       </div>
     </div>
@@ -20,7 +21,7 @@
 
 <script>
 import axios from 'axios';
-// import { mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 export default {
   name: 'comments',
   props: {
@@ -32,14 +33,38 @@ export default {
   data() {
     return {
       comments: null,
+      commentValue: null,
     };
   },
-  // methods: {
-  //   isDeleteComment(userId) {
-  //     const userIdConnected = localStorage('userId');
-  //     return userIdConnected === userId ? true : false;
-  //   },
-  // },
+  methods: {
+    ...mapActions(['submitComment']),
+
+    addComment() {
+      this.submitComment({
+        content: this.commentValue,
+        postId: this.postId,
+      }).then(() => {
+        const token = localStorage.getItem('token');
+        axios
+          .get(`http://localhost:3000/api/comments/${this.postId}`, {
+            headers: {
+              authorization: 'Bearer ' + token,
+            },
+          })
+          .then((res) => {
+            this.comments = res.data;
+          });
+      });
+    },
+    isDeleteComment(userId) {
+      let userIdConnected = '';
+      if (this.$store.state.userInfo) {
+        userIdConnected = this.$store.state.userInfo.userId;
+      }
+      return userIdConnected === userId ? true : false;
+    },
+  },
+
   mounted: function () {
     console.log('salluttt', this.postId);
     const token = localStorage.getItem('token');
@@ -60,7 +85,17 @@ export default {
 
 <style scoped>
 .comments {
+  background-color: lightgray;
   border: 1px solid black;
   text-align: left;
+}
+input {
+  width: 80%;
+}
+#validation {
+  margin-bottom: 5px;
+}
+h3 {
+  color: blueviolet;
 }
 </style>
