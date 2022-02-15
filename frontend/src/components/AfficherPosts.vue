@@ -14,6 +14,13 @@
     </div>
     <div v-for="post in posts" :key="post.postId">
       <div id="posts">
+        <button
+          class="erase"
+          @click="deletePost(post.postId, post.userId)"
+          v-if="isDeletePost(post.userId)"
+        >
+          X Effacer
+        </button>
         <h3>
           {{ post.nom }}
           {{ post.prenom }}
@@ -50,6 +57,9 @@ export default {
     return {
       postValue: null,
       posts: null,
+      token: localStorage.getItem('token'),
+      userIdConnected: localStorage.getItem('userId'),
+      isAdmin: parseInt(localStorage.getItem('admin')),
     };
   },
   mounted: function () {
@@ -81,6 +91,25 @@ export default {
           .then((res) => (this.posts = res.data.result))
           .catch((err) => console.log('stop', err));
       });
+    },
+    isDeletePost(userId) {
+      return parseInt(this.userIdConnected) === userId || this.isAdmin === 1
+        ? true
+        : false;
+    },
+    deletePost(postId, userId) {
+      console.log('userId', userId);
+      console.log('postId', postId);
+      axios
+        .delete(`http://localhost:3000/api/posts/${postId}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+        .then(() => {
+          this.posts = this.posts.filter((post) => post.postId !== postId);
+        });
     },
   },
 };
@@ -118,6 +147,12 @@ button {
   margin: auto;
   margin-bottom: 10px;
   margin-top: 10px;
+}
+.erase {
+  background-color: orangered;
+  color: white;
+  height: 20px;
+  width: 15%;
 }
 .image,
 .gif {

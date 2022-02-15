@@ -16,7 +16,6 @@
         >
           X
         </button>
-        <!-- div button envoi commentId avec axios pour suppression -->
         <h3>{{ item.nom }} {{ item.prenom }}</h3>
         <p>{{ item.content }}</p>
       </div>
@@ -70,9 +69,7 @@ export default {
         ? true
         : false;
     },
-    deleteComment(commentId, userId) {
-      console.log('userId', userId);
-      console.log('commentId', commentId);
+    deleteComment(commentId) {
       axios
         .delete(`http://localhost:3000/api/comments/${commentId}`, {
           headers: {

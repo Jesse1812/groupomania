@@ -17,6 +17,7 @@ exports.addNewComment = (req, res, next) => {
   );
 };
 
+// Afficher les commentaires
 exports.getAllCommentsByPostId = (req, res) => {
   const sql = `SELECT user.nom, user.prenom, user.userId, comment.content, comment.date, comment.commentId FROM user,
    comment INNER JOIN post ON post.postId = comment.postId WHERE 

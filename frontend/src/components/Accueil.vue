@@ -85,9 +85,6 @@ export default {
       messageLogin: null,
     };
   },
-  // computed: {
-  //   ...mapState(['formMessage', 'messageLog']),
-  // },
   methods: {
     ...mapActions(['login']),
     submitForm(event) {
@@ -97,10 +94,10 @@ export default {
       } else {
         axios
           .post('http://localhost:3000/api/auth/signup', this.formValues)
-          .then(() => (this.formMessage = 'Enregistrement avec succée'))
+          .then(() => (this.formMessage = 'Enregistrement avec succés'))
           .catch((err) => {
             console.log(err);
-            this.formMessage = 'Un probleme est survenue !';
+            this.formMessage = 'Un probleme est survenu !';
           });
       }
     },
