@@ -20,7 +20,7 @@ exports.addNewComment = (req, res, next) => {
 exports.getAllCommentsByPostId = (req, res) => {
   const sql = `SELECT user.nom, user.prenom, user.userId, comment.content, comment.date, comment.commentId FROM user,
    comment INNER JOIN post ON post.postId = comment.postId WHERE 
-   user.userId = post.userId AND post.postId = '${req.params.id}' ORDER BY comment.date DESC`;
+   user.userId = comment.userId AND post.postId = '${req.params.id}' ORDER BY comment.date DESC`;
   db.query(sql, (err, result) => {
     if (err) {
       res.status(404).json({ err });
@@ -32,7 +32,7 @@ exports.getAllCommentsByPostId = (req, res) => {
 
 //Supprimer un commentaire
 exports.deleteComment = (req, res, next) => {
-  const sql = `DELETE FROM comment WHERE commentId = '${req.params.id}' AND userId = '${req.headers.userid}'`;
+  const sql = `DELETE FROM comment WHERE commentId = '${req.params.id}'`;
   db.query(sql, (error, result) => {
     if (error) {
       return res.status(400).json({

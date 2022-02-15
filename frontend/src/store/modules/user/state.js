@@ -5,7 +5,7 @@ if (userId && token) {
   userInfo.userId = userId;
   userInfo.token = token;
 }
-console.log(userInfo);
+
 export const state = {
   userInfo,
 };

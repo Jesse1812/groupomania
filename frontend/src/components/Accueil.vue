@@ -97,13 +97,24 @@ export default {
       } else {
         axios
           .post('http://localhost:3000/api/auth/signup', this.formValues)
-          .then((res) => (this.formMessage = res.data.message))
-          .catch((err) => (this.formMessage = err.data.error));
+          .then(() => (this.formMessage = 'Enregistrement avec succée'))
+          .catch((err) => {
+            console.log(err);
+            this.formMessage = 'Un probleme est survenue !';
+          });
       }
     },
     submitLogin(event) {
       event.preventDefault();
-      this.login(this.formLogin);
+      this.login(this.formLogin).then(
+        () => {
+          this.$router.push('/posts');
+        },
+        (err) => {
+          console.log(err);
+          this.messageLogin = 'Email ou Password incorrect !';
+        }
+      );
     },
   },
 };

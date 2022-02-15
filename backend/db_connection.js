@@ -12,7 +12,6 @@ sql.getConnection(function (err) {
   if (err) {
     return console.error('error: ' + err.message);
   }
-
   console.log('Connection à la base de donnée réussie !');
 });
 

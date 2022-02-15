@@ -6,7 +6,6 @@ exports.getAllPosts = (req, res, next) => {
     'SELECT post.*, user.* FROM post INNER JOIN user WHERE user.userId = post.userId ORDER BY date DESC';
   db.query(sql, (error, result) => {
     if (error) {
-      console.log(error);
     }
     res.send({ status: 200, message: 'Successful request !', result });
   });

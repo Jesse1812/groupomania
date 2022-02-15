@@ -38,7 +38,6 @@ exports.login = (req, res, next) => {
   try {
     db.query(sql, (error, result) => {
       if (error) {
-        console.log(error);
         return res.status(500).json({ loggedIn: false, message: 'Erreur' });
       }
       if (result?.length > 0) {
@@ -50,6 +49,7 @@ exports.login = (req, res, next) => {
             userId: result[0].userId,
             firstName: result[0].nom,
             lastName: result[0].prenom,
+            admin: result[0].admin,
             token: jwt.sign(
               { userId: result[0].userId },
               process.env.JWTPRIVATEKEY,

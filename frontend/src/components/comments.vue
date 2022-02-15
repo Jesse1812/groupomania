@@ -8,12 +8,17 @@
       v-model="commentValue"
     />
     <button @click="addComment" id="validation" type="submit">Publier</button>
-    <div v-for="comment in comments" :key="comment.commentId">
+    <div v-for="item in comments" :key="item.commentId">
       <div class="comments">
-        <button v-if="isDeleteComment(comment.userId)">X</button>
+        <button
+          @click="deleteComment(item.commentId, item.userId)"
+          v-if="isDeleteComment(item.userId)"
+        >
+          X
+        </button>
         <!-- div button envoi commentId avec axios pour suppression -->
-        <h3>{{ comment.userId }}</h3>
-        <p>{{ comment.content }}</p>
+        <h3>{{ item.nom }} {{ item.prenom }}</h3>
+        <p>{{ item.content }}</p>
       </div>
     </div>
   </div>
@@ -34,6 +39,9 @@ export default {
     return {
       comments: null,
       commentValue: null,
+      token: localStorage.getItem('token'),
+      userIdConnected: localStorage.getItem('userId'),
+      isAdmin: parseInt(localStorage.getItem('admin')),
     };
   },
   methods: {
@@ -43,6 +51,7 @@ export default {
       this.submitComment({
         content: this.commentValue,
         postId: this.postId,
+        userId: this.userIdConnected,
       }).then(() => {
         const token = localStorage.getItem('token');
         axios
@@ -57,16 +66,29 @@ export default {
       });
     },
     isDeleteComment(userId) {
-      let userIdConnected = '';
-      if (this.$store.state.userInfo) {
-        userIdConnected = this.$store.state.userInfo.userId;
-      }
-      return userIdConnected === userId ? true : false;
+      return parseInt(this.userIdConnected) === userId || this.isAdmin === 1
+        ? true
+        : false;
+    },
+    deleteComment(commentId, userId) {
+      console.log('userId', userId);
+      console.log('commentId', commentId);
+      axios
+        .delete(`http://localhost:3000/api/comments/${commentId}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+        .then(() => {
+          this.comments = this.comments.filter(
+            (comment) => comment.commentId !== commentId
+          );
+        });
     },
   },
 
   mounted: function () {
-    console.log('salluttt', this.postId);
     const token = localStorage.getItem('token');
     axios
       .get(`http://localhost:3000/api/comments/${this.postId}`, {
@@ -75,7 +97,6 @@ export default {
         },
       })
       .then((res) => {
-        console.log('hola', res.data);
         this.comments = res.data;
       })
       .catch((err) => console.log('stop', err));
