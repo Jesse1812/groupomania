@@ -93,8 +93,8 @@ export default {
           .post('http://localhost:3000/api/auth/signup', this.formValues)
           .then(() => (this.formMessage = 'Enregistrement avec succés'))
           .catch((err) => {
-            console.log(err);
-            this.formMessage = 'Enregistrement incomplet';
+            this.formMessage =
+              err.response.data.message || 'Enregistrement incomplet';
           });
       }
     },

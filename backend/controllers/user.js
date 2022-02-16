@@ -3,27 +3,25 @@ const jwt = require('jsonwebtoken');
 const db = require('../db_connection');
 const dotenv = require('dotenv');
 
+const getImageUrl = (req) =>
+  req.protocol + '://' + req.get('host') + '/images/' + req.file.filename;
+
 dotenv.config();
 
 // Inscription
 exports.signup = async (req, res) => {
   const { nom, prenom, email, password, photo } = req.body;
   if (nom && prenom && email && password) {
-    const hashPassword = await bcrypt.hash(password, 10);
-    const sql = `INSERT INTO user (nom, prenom, email, password, photo) VALUES ('${nom}', 
-  '${prenom}', '${email}', '${hashPassword}', '${photo}')`;
-    try {
-      db.query(sql, (error) => {
-        if (error) {
-          return res
-            .status(401)
-            .json({ message: 'Cet email est déjà utilisé' });
-        }
-        return res.status(201).json({ message: 'Enregistrement confirmé' });
-      });
-    } catch (err) {
-      return res.status(500).json({ loggedIn: false, message: 'Erreur' });
-    }
+    const uniqueEmail = `SELECT * FROM user WHERE email = '${email}'`;
+    db.query(uniqueEmail, (error, result) => {
+      if (error) {
+        return res.status(401).json({ message: 'Une erreur est survenue' });
+      } else if (result.length > 0) {
+        return res.status(401).json({ message: 'Cet email est déjà utilisé' });
+      } else {
+        return checkEmailPassword(nom, prenom, password, email, photo, res);
+      }
+    });
   } else {
     return res
       .status(401)
@@ -31,8 +29,25 @@ exports.signup = async (req, res) => {
   }
 };
 
+async function checkEmailPassword(nom, prenom, password, email, photo, res) {
+  const hashPassword = await bcrypt.hash(password, 10);
+  const sql = `INSERT INTO user (nom, prenom, email, password, photo) VALUES ('${nom}', 
+  '${prenom}', '${email}', '${hashPassword}', '${photo}')`;
+  try {
+    db.query(sql, (error) => {
+      if (error) {
+        console.log(error);
+        return res.status(401).json({ message: 'Une erreur est survenue' });
+      }
+      return res.status(201).json({ message: 'Enregistrement confirmé' });
+    });
+  } catch (err) {
+    return res.status(500).json({ loggedIn: false, message: 'Erreur' });
+  }
+}
+
 // Connexion
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
   const { email, password } = req.body;
   const sql = `SELECT * FROM user WHERE email = '${email}'`;
   try {
@@ -71,7 +86,7 @@ exports.login = (req, res, next) => {
 };
 
 // Delete user
-exports.deleteUser = (req, res, next) => {
+exports.deleteUser = (req, res) => {
   db.query(
     `DELETE FROM user WHERE userId = ${req.params.id}`,
     (error, result) => {
@@ -83,4 +98,18 @@ exports.deleteUser = (req, res, next) => {
       return res.status(200).json({ message: 'Compte supprimé' });
     }
   );
+};
+
+// Ajouter photo de profil
+exports.updateUser = (req, res) => {
+  const picture = getImageUrl(req);
+  const query = `UPDATE user SET photo = '${picture}' WHERE userId = ${req.body.userId}`;
+  db.query(query, (error, result) => {
+    if (error) {
+      return res.status(400).json({
+        error,
+      });
+    }
+    return res.status(200).json({ message: 'Profil modifié' });
+  });
 };

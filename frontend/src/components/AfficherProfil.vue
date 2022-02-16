@@ -12,7 +12,10 @@
         <h2>Prénom: {{ userInfo && userInfo.lastName }}</h2>
       </div>
     </div>
-    <button id="modify-account" type="submit">Modifier ma photo</button>
+    <input id="modify-pic" type="file" @change="onFileChange" />
+    <button id="add-pic" type="submit" @click="addPicture">
+      Enregistrer ma photo
+    </button>
     <button @click="deconnect()" id="deconnect" type="submit">
       Me déconnecter
     </button>
@@ -27,10 +30,32 @@ import axios from 'axios';
 import { mapGetters } from 'vuex';
 export default {
   name: 'AfficherProfil',
+  data() {
+    return {
+      picture: null,
+    };
+  },
   computed: {
     ...mapGetters(['userInfo']),
   },
   methods: {
+    onFileChange(event) {
+      this.picture = event.target.files[0];
+      console.log(this.picture);
+    },
+    addPicture() {
+      const userId = localStorage.getItem('userId');
+      const token = localStorage.getItem('token');
+      const formData = new FormData();
+      formData.append('picture', this.picture);
+      formData.append('userId', userId);
+      axios.post(`http://localhost:3000/api/auth/user`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: `Bearer ${token}`,
+        },
+      });
+    },
     deleteProfil() {
       window.alert('Vous allez supprimer définitivement votre profil');
       const userId = localStorage.getItem('userId');
@@ -73,9 +98,16 @@ export default {
   flex-direction: row;
   width: 80%;
 }
-#modify-account,
+#add-pic,
 #deconnect {
   width: 30%;
+  height: 30px;
+  margin: auto;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+#modify-pic {
+  width: 50%;
   height: 30px;
   margin: auto;
   margin-bottom: 10px;
