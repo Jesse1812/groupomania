@@ -67,7 +67,6 @@ export default {
     ...mapActions(['submitPost']),
 
     onFileChange(event) {
-      console.log('picture', event.target.files[0]);
       this.picture = event.target.files[0];
     },
 

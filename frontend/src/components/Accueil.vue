@@ -94,7 +94,7 @@ export default {
           .then(() => (this.formMessage = 'Enregistrement avec succés'))
           .catch((err) => {
             console.log(err);
-            this.formMessage = 'Un probleme est survenu !';
+            this.formMessage = 'Enregistrement incomplet';
           });
       }
     },

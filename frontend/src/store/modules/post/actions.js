@@ -4,22 +4,6 @@ const apiService = axios.create({
   baseURL: 'http://localhost:3000/api/',
 });
 
-// const apiService = axios.create({
-//   baseURL: 'http://localhost:3000/api/',
-// });
-
-// export const submitPost = (_, data) => {
-//   return new Promise((resolve, reject) => {
-//     apiService.post('/posts', data).then(
-//       (res) => {
-//         resolve(res);
-//         commit();
-//       },
-//       (err) => reject(err)
-//     );
-//   });
-// };
-
 export const submitPost = (_, data) => {
   const formData = new FormData();
   formData.append('message', data.message);
