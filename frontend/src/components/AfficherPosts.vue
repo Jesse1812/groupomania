@@ -1,5 +1,5 @@
 <template>
-  <div id="messagerie">
+  <form enctype="multipart/form-data" id="messagerie">
     <h1>Messagerie</h1>
     <div id="messages">
       <input
@@ -8,8 +8,7 @@
         placeholder="Ecrivez votre message"
         v-model="postValue"
       />
-      <p>Ajouter une photo</p>
-      <p>Ajouter un .gif</p>
+      <input type="file" @change="onFileChange" />
       <button @click="addPost" id="Validation" type="submit">Publier</button>
     </div>
     <div v-for="post in posts" :key="post.postId">
@@ -25,20 +24,13 @@
           {{ post.nom }}
           {{ post.prenom }}
         </h3>
-        <img
-          v-if="post.picture !== 'undefined'"
-          :src="post.picture"
-          class="image"
-        />
-        <div v-if="post.video !== 'undefined'">
-          <iframe :src="post.video" class="gif"></iframe>
-        </div>
+        <img v-if="post.picture" :src="post.picture" class="image" />
         <h2>{{ post.message }}</h2>
         <hr />
         <comments :postId="post.postId" />
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
@@ -50,9 +42,6 @@ export default {
   components: {
     comments,
   },
-  props: {
-    msg: String,
-  },
   data() {
     return {
       postValue: null,
@@ -60,6 +49,7 @@ export default {
       token: localStorage.getItem('token'),
       userIdConnected: localStorage.getItem('userId'),
       isAdmin: parseInt(localStorage.getItem('admin')),
+      picture: null,
     };
   },
   mounted: function () {
@@ -76,10 +66,17 @@ export default {
   methods: {
     ...mapActions(['submitPost']),
 
+    onFileChange(event) {
+      console.log('picture', event.target.files[0]);
+      this.picture = event.target.files[0];
+    },
+
     addPost: function () {
+      const userId = localStorage.getItem('userId');
       this.submitPost({
         message: this.postValue,
-        userId: this.userInfo.userId,
+        picture: this.picture,
+        userId: parseInt(userId),
       }).then(() => {
         const token = localStorage.getItem('token');
         axios
@@ -98,13 +95,12 @@ export default {
         : false;
     },
     deletePost(postId, userId) {
-      console.log('userId', userId);
-      console.log('postId', postId);
       axios
         .delete(`http://localhost:3000/api/posts/${postId}`, {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.token}`,
+            authorization: `Bearer ${this.token}`,
+            userId,
           },
         })
         .then(() => {

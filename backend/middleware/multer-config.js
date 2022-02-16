@@ -5,6 +5,7 @@ const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpeg',
   'image/png': 'png',
+  'image/gif': 'gif',
 };
 
 //Création fichier image si vide (pour github)
@@ -27,4 +28,4 @@ const storage = multer.diskStorage({
   },
 });
 
-module.exports = multer({ storage: storage }).single('image');
+module.exports = multer({ storage: storage }).single('picture');

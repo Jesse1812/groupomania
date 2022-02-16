@@ -65,9 +65,6 @@ import axios from 'axios';
 
 export default {
   name: 'Accueil',
-  props: {
-    msg: String,
-  },
   data() {
     return {
       formValues: {

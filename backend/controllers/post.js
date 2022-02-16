@@ -1,5 +1,8 @@
 const db = require('../db_connection');
 
+const getImageUrl = (req) =>
+  req.protocol + '://' + req.get('host') + '/images/' + req.file.filename;
+
 //Affichage des posts
 exports.getAllPosts = (req, res, next) => {
   const sql =
@@ -13,20 +16,24 @@ exports.getAllPosts = (req, res, next) => {
 
 // Création d'un post
 exports.createPost = (req, res, next) => {
-  db.query(
-    `INSERT INTO post (message, picture, video, userId, date) VALUES ('${req.body.message}', 
-    '${req.body.picture}', '${req.body.video}', '${req.body.userId}', NOW())`,
-    (error, result) => {
-      if (error) {
-        return res.status(400).json({
-          error,
-        });
-      }
-      return res.status(201).json({
-        message: 'Votre post à été publié !',
+  let query;
+  if (req.file) {
+    const picture = getImageUrl(req);
+    query = `INSERT INTO post (message, picture, video, userId) VALUES ('${req.body.message}', 
+    '${picture}', '${req.body.video}', '${req.body.userId}')`;
+  } else {
+    query = `INSERT INTO post (message, video, userId) VALUES ('${req.body.message}', '${req.body.video}', '${req.body.userId}')`;
+  }
+  db.query(query, (error, result) => {
+    if (error) {
+      return res.status(400).json({
+        error,
       });
     }
-  );
+    return res.status(201).json({
+      message: 'Votre post à été publié !',
+    });
+  });
 };
 
 // Affichage d'un post

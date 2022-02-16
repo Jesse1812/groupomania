@@ -1,6 +1,6 @@
 <template>
   <div class="profil">
-    <AfficherProfil msg="Welcome to Your Vue.js App" />
+    <AfficherProfil />
   </div>
 </template>
 

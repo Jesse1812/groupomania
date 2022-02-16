@@ -27,9 +27,6 @@ import axios from 'axios';
 import { mapGetters } from 'vuex';
 export default {
   name: 'AfficherProfil',
-  props: {
-    msg: String,
-  },
   computed: {
     ...mapGetters(['userInfo']),
   },
