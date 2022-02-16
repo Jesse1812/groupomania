@@ -12,7 +12,7 @@
 
     <div id="nav">
       <router-link to="/">Connection</router-link> |
-      <router-link to="/profil">Mon Profil</router-link> |
+      <router-link to="/profil">Mon compte</router-link> |
       <router-link to="/posts">Forum</router-link>
     </div>
     <router-view />

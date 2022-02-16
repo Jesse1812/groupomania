@@ -13,7 +13,6 @@ export const login = ({ commit }, formLogin) => {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('userId', res.data.userId);
         localStorage.setItem('admin', res.data.admin);
-        console.log('reeeees', res.data);
         commit('SET_USER', res.data);
         resolve(res);
       },

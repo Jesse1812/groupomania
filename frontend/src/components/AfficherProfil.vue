@@ -1,17 +1,17 @@
 <template>
   <section id="profil">
-    <h1>Profil</h1>
-    <div id="description">
-      <img
-        id="profil-image"
-        src="../assets/images/profile.png"
-        alt="image de profil"
-      />
-      <div id="colonne">
-        <h2>Nom: {{ userInfo && userInfo.firstName }}</h2>
-        <h2>Prénom: {{ userInfo && userInfo.lastName }}</h2>
-      </div>
-    </div>
+    <h1>Photo de profil</h1>
+    <img
+      v-if="user && user[0].photo"
+      :src="user[0].photo"
+      id="profil-image"
+      class="image"
+      alt="image de profil"
+    />
+    <!-- <div id="colonne"> -->
+    <!-- <h2>Nom: {{ userInfo && userInfo.firstName }}</h2>
+      <h2>Prénom: {{ userInfo && userInfo.lastName }}</h2>
+    </div> -->
     <input id="modify-pic" type="file" @change="onFileChange" />
     <button id="add-pic" type="submit" @click="addPicture">
       Enregistrer ma photo
@@ -32,8 +32,20 @@ export default {
   name: 'AfficherProfil',
   data() {
     return {
-      picture: null,
+      user: null,
+      userId: localStorage.getItem('userId'),
+      token: localStorage.getItem('token'),
     };
+  },
+  mounted: function () {
+    axios
+      .get(`http://localhost:3000/api/auth/${this.userId}`, {
+        headers: {
+          authorization: 'Bearer ' + this.token,
+        },
+      })
+      .then((res) => (this.user = res.data))
+      .catch((err) => console.log('Error', err));
   },
   computed: {
     ...mapGetters(['userInfo']),
@@ -41,20 +53,28 @@ export default {
   methods: {
     onFileChange(event) {
       this.picture = event.target.files[0];
-      console.log(this.picture);
     },
     addPicture() {
-      const userId = localStorage.getItem('userId');
-      const token = localStorage.getItem('token');
       const formData = new FormData();
       formData.append('picture', this.picture);
-      formData.append('userId', userId);
-      axios.post(`http://localhost:3000/api/auth/user`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          authorization: `Bearer ${token}`,
-        },
-      });
+      formData.append('userId', this.userId);
+      axios
+        .post(`http://localhost:3000/api/auth/user`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            authorization: `Bearer ${this.token}`,
+          },
+        })
+        .then(() =>
+          axios
+            .get(`http://localhost:3000/api/auth/${this.userId}`, {
+              headers: {
+                authorization: 'Bearer ' + this.token,
+              },
+            })
+            .then((res) => (this.user = res.data))
+            .catch((err) => console.log('Error', err))
+        );
     },
     deleteProfil() {
       window.alert('Vous allez supprimer définitivement votre profil');
@@ -93,11 +113,6 @@ export default {
   height: 30%;
   margin: auto;
 }
-#description {
-  display: flex;
-  flex-direction: row;
-  width: 80%;
-}
 #add-pic,
 #deconnect {
   width: 30%;
@@ -107,7 +122,7 @@ export default {
   margin-top: 10px;
 }
 #modify-pic {
-  width: 50%;
+  width: 40%;
   height: 30px;
   margin: auto;
   margin-bottom: 10px;

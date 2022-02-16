@@ -10,7 +10,7 @@ dotenv.config();
 
 // Inscription
 exports.signup = async (req, res) => {
-  const { nom, prenom, email, password, photo } = req.body;
+  const { nom, prenom, email, password } = req.body;
   if (nom && prenom && email && password) {
     const uniqueEmail = `SELECT * FROM user WHERE email = '${email}'`;
     db.query(uniqueEmail, (error, result) => {
@@ -19,7 +19,7 @@ exports.signup = async (req, res) => {
       } else if (result.length > 0) {
         return res.status(401).json({ message: 'Cet email est déjà utilisé' });
       } else {
-        return checkEmailPassword(nom, prenom, password, email, photo, res);
+        return checkEmailPassword(nom, prenom, password, email, res);
       }
     });
   } else {
@@ -29,14 +29,13 @@ exports.signup = async (req, res) => {
   }
 };
 
-async function checkEmailPassword(nom, prenom, password, email, photo, res) {
+async function checkEmailPassword(nom, prenom, password, email, res) {
   const hashPassword = await bcrypt.hash(password, 10);
-  const sql = `INSERT INTO user (nom, prenom, email, password, photo) VALUES ('${nom}', 
-  '${prenom}', '${email}', '${hashPassword}', '${photo}')`;
+  const sql = `INSERT INTO user (nom, prenom, email, password) VALUES ('${nom}', 
+  '${prenom}', '${email}', '${hashPassword}')`;
   try {
     db.query(sql, (error) => {
       if (error) {
-        console.log(error);
         return res.status(401).json({ message: 'Une erreur est survenue' });
       }
       return res.status(201).json({ message: 'Enregistrement confirmé' });
@@ -111,5 +110,18 @@ exports.updateUser = (req, res) => {
       });
     }
     return res.status(200).json({ message: 'Profil modifié' });
+  });
+};
+
+// Get User par id
+exports.getUserById = (req, res) => {
+  const query = `SELECT * from user WHERE userId ='${req.params.id}'`;
+  db.query(query, (error, result) => {
+    if (error) {
+      return res.status(400).json({
+        error,
+      });
+    }
+    return res.status(200).json(result);
   });
 };
