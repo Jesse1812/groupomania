@@ -143,5 +143,8 @@ export default {
     min-height: 50px;
     min-width: 80px;
   }
+  #profil {
+    width: 90%;
+  }
 }
 </style>

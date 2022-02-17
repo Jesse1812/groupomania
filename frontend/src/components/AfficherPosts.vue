@@ -119,7 +119,7 @@ export default {
 
 <style scoped>
 #messagerie {
-  width: 58%;
+  width: 68%;
   display: flex;
   flex-direction: column;
   margin: auto;
@@ -165,6 +165,7 @@ button {
 }
 h3 {
   text-align: left;
+  color: blueviolet;
 }
 
 @media only screen and (max-width: 600px) {
@@ -177,6 +178,9 @@ h3 {
   }
   button {
     min-width: 50px;
+  }
+  #messagerie {
+    width: 90%;
   }
 }
 </style>
