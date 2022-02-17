@@ -66,6 +66,7 @@ export default {
   methods: {
     ...mapActions(['submitPost']),
 
+    // Gestion des images importées
     onFileChange(event) {
       this.picture = event.target.files[0];
     },
@@ -84,10 +85,16 @@ export default {
               authorization: 'Bearer ' + token,
             },
           })
-          .then((res) => (this.posts = res.data.result))
+          .then((res) => {
+            this.posts = res.data.result;
+            this.postValue = null;
+          })
           .catch((err) => console.log('stop', err));
       });
     },
+
+    // // Pour affichage du bouton effacer seulement si le post a été créé par
+    // l'utilisateur connecté
     isDeletePost(userId) {
       return parseInt(this.userIdConnected) === userId || this.isAdmin === 1
         ? true
